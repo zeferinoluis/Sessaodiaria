@@ -1,4 +1,4 @@
-const CACHE_NOME = 'sessao-diaria-v10';
+const CACHE_NOME = 'sessao-diaria-v11';
 const FICHEIROS = [
   './index.html',
   './manifest.json',
@@ -24,7 +24,31 @@ self.addEventListener('activate', (evento) => {
 });
 
 self.addEventListener('fetch', (evento) => {
+  const pedido = evento.request;
+  const ehNavegacao = pedido.mode === 'navigate' || (pedido.destination === 'document');
+
+  if (ehNavegacao) {
+    // HTML: tenta sempre a rede primeiro para nunca ficar preso numa versão antiga
+    evento.respondWith(
+      fetch(pedido)
+        .then((resposta) => {
+          const copia = resposta.clone();
+          caches.open(CACHE_NOME).then((cache) => cache.put(pedido, copia));
+          return resposta;
+        })
+        .catch(() => caches.match(pedido).then((r) => r || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Restantes ficheiros: cache primeiro, com atualização em segundo plano
   evento.respondWith(
-    caches.match(evento.request).then((resposta) => resposta || fetch(evento.request))
+    caches.match(pedido).then((respostaCache) => {
+      const pedidoRede = fetch(pedido).then((respostaRede) => {
+        caches.open(CACHE_NOME).then((cache) => cache.put(pedido, respostaRede.clone()));
+        return respostaRede;
+      }).catch(() => respostaCache);
+      return respostaCache || pedidoRede;
+    })
   );
 });
