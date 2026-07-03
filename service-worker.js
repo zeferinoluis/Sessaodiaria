@@ -1,4 +1,4 @@
-const CACHE_NOME = 'sessao-diaria-v5';
+const CACHE_NOME = 'sessao-diaria-v6';
 const FICHEIROS = [
   './index.html',
   './manifest.json',
