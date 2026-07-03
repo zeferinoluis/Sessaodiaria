@@ -1,13 +1,13 @@
 {
   "name": "Sessão Diária — Treino Mental",
   "short_name": "Sessão Diária",
-  "description": "Sessão diária de treino mental: cruzada, trivia e lógica.",
+  "description": "Sessão diária de treino mental: palavras cruzadas, trivia, puzzles lógicos, memória de sequências e fluência verbal. Funciona offline.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#13201C",
-  "theme_color": "#13201C",
+  "background_color": "#F6F0E4",
+  "theme_color": "#C2702C",
   "lang": "pt-PT",
   "icons": [
     {
